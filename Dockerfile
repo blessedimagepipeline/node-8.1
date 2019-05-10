@@ -3,8 +3,7 @@ LABEL maintainer="Azure App Services Container Images <appsvc-images@microsoft.c
 
 RUN echo "ipv6" >> /etc/modules
 
-RUN npm install -g pm2 \
-     && mkdir -p /home/LogFiles /opt/startup \
+RUN mkdir -p /home/LogFiles /opt/startup \
      && echo "root:Docker!" | chpasswd \
      && echo "cd /home" >> /etc/bash.bashrc \
      && apt-get update \  
@@ -21,10 +20,10 @@ COPY sshd_config /etc/ssh/
 
 COPY ssh_setup.sh /tmp
 RUN chmod -R +x /opt/startup \
-   && chmod -R +x /tmp/ssh_setup.sh \
-   && (sleep 1;/tmp/ssh_setup.sh 2>&1 > /dev/null) \
-   && rm -rf /tmp/* \
-   && cd /opt/startup
+     && chmod -R +x /tmp/ssh_setup.sh \
+     && (sleep 1;/tmp/ssh_setup.sh 2>&1 > /dev/null) \
+     && rm -rf /tmp/* \
+     && cd /opt/startup
 
 # Workaround for https://github.com/npm/npm/issues/16892
 # Running npm install as root blows up in a  --userns-remap
